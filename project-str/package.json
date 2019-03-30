@@ -1,0 +1,15 @@
+{
+  "name": "codekul",
+  "version": "0.0.1",
+  "description": "this is simple package",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "html-pdf": "^2.2.0",
+    "rxjs": "^6.4.0"
+  }
+}
