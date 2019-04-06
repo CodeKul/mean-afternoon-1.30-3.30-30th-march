@@ -1,3 +1,15 @@
+
+/**
+ * - design (bootstrap and material)
+ * - router
+ * - http
+ * - forms
+ * - modules
+ * - dividing components
+ * - *ngFor, *nfIf
+ * - intercomponent communication
+ */
+
 const express = require('express')
 const app = express()
 app.set('views', './views')
