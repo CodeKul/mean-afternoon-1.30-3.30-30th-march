@@ -12,6 +12,7 @@
 
 const express = require('express')
 const app = express()
+const fs = require('fs');
 app.set('views', './views')
 app.set('view engine', 'pug')
 
@@ -32,6 +33,13 @@ app.get('/', (req, res) => {
 })
 app.get('/my', (req, res) => {
     res.render('my', { title: 'Android', myNm: req['query']['myNm'] })
+})
+app.get(`/file`, (req, res) => {
+    fs.writeFile(`./our.txt`, req['query']['myNm'] , err => {
+        if (err) throw err
+        console.log(`Data written successfully`)
+        res.sendFile(`${__dirname}/our.txt`)
+    })
 })
 
 app.listen(port, () => console.log(`Express Server Running on port ${port}`))
