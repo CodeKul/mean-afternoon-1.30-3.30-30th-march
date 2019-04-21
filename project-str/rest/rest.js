@@ -1,22 +1,47 @@
 var express = require('express')
 var bodyParser = require('body-parser')
+const fileUpload = require('express-fileupload');
 
 var app = express()
 let port = 3000
-app.use(bodyParser.json())
+let parserUrlEncoded = bodyParser.urlencoded({ extended: false })
+let parserJson = bodyParser.json()
 
+app.use(parserUrlEncoded)
+app.use(parserJson)
+app.use(fileUpload())
+
+app.post(`/upload`, (req, res) => {
+    if (Object.keys(req.files).length == 0) {
+        return res.status(400).json({ status: 'error', cause: `Error caused beacause there is no file uploaded ${Object.keys(req.files).length}` })
+    }
+
+    let uploadedFile = req.files.myFile;
+    uploadedFile.mv(`./uploaded-files/${req.files.myFile.name}`, function (err) {
+        if (err)
+            return res.status(500).send(err);
+        res.json({status : 'File Uploaded Successfully'});
+    });
+})
 app.post(`/my`, (req, res) => {
     let body = req.body
     body.createdat = new Date()
     res.json(body)
 })
 
-app.get(`/account`, (req, res) => {
+app.get(`/account`, parserJson, (req, res) => {
     let ac = getAccount()
     res.json(ac)
 })
 
-app.post('/invoice', (req, res) => {
+app.post(`/accountForm`, parserUrlEncoded, (req, res) => {
+    let ac = {}
+    ac.acNm = req.body.acNm
+    ac.acNum = req.body.acNum
+    res.json(ac)
+})
+
+app.post('/invoice', parserJson, (req, res) => {
     let invDt = req.body
     let htmlInvoice = `
     <html>
@@ -28,9 +53,9 @@ app.post('/invoice', (req, res) => {
         </body>
     </html>
     `
-    fs.writeFile('./inv.html', htmlInvoice, err =>{
-        if(err) {
-               //send res 
+    fs.writeFile('./inv.html', htmlInvoice, err => {
+        if (err) {
+            //send res 
         }
         //covert html to pdf and send json response
     })
